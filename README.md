@@ -1,2 +1,2 @@
 # Battleship
-Introduction to Java project.
+Introduction to Java and part of the course Basic Programming. 
