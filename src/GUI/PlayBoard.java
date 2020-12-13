@@ -97,6 +97,7 @@ public class PlayBoard {
 
         @Override
         public void actionPerformed(ActionEvent ev) {
+
             frame.dispose();
         }
     }
