@@ -117,16 +117,28 @@ public class StartFrame {
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-            frame.dispose();
+//            frame.dispose();
             new PlayBoard((Integer) rowSpinner.getValue(),(Integer) columnSpinner.getValue());
         }
     }
 
     private class rulesListener implements ActionListener {
+        String rulesExplained = "Ik ben makelaar in koffi, en woon op de Lauriergracht No 37.\n Het is mijn gewoonte niet, " +
+                "romans te schrijven, of zulke dingen, en het heeft dan ook lang geduurd, voor \n ik er toe " +
+                "overging een paar riem papier extra te bestellen, en het werk aan te vangen, dat \n gij, " +
+                "lieve lezer, zoâven in de hand hebt genomen, en dat ge lezen moet als ge makelaar\n in " +
+                "koffie zijt, of als ge wat anders zijt. Niet alleen dat ik nooit iets schreef wat \n naar " +
+                "een roman geleek, maar ik houd er zelfs niet van, iets dergelijks te lezen, omdat " +
+                "ik een man van zaken ben.";
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-            JOptionPane.showMessageDialog(frame, "Not yet implemented!", "Warning!", JOptionPane.WARNING_MESSAGE);
+            JTextArea textArea = new JTextArea(6, 25);
+            textArea.setText(rulesExplained);
+            textArea.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            JOptionPane.showMessageDialog(frame,scrollPane);
+
         }
     }
 
@@ -163,7 +175,14 @@ public class StartFrame {
     }
 
     public static void main(String[] args) {
-        new StartFrame();
+
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                new StartFrame();
+            }
+        });
+
+
     }
 
 

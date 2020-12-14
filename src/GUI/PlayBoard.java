@@ -46,15 +46,11 @@ public class PlayBoard {
         highScore.addActionListener(new HighScoreListener());
         quitGame.addActionListener(new QuitGameListener());
 
-        for (int i = 0; i < amountRows*amountColumns; i++) {
-            JButton button = new JButton();
-            button.setBackground(Color.LIGHT_GRAY);
-            button.setPreferredSize(new Dimension(10, 10));
-//            button.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-            String e = String.valueOf(i);
-            button.setActionCommand(e);
-            button.addActionListener(new BoardListener());
-            panel3.add(button);
+        for (int i = 0; i < amountRows; i++) {
+            for (int j = 0; j < amountColumns; j++) {
+                BoardButton button = new BoardButton(i,j);
+                panel3.add(button);
+            }
         }
 
         panel1.add(highScore);
@@ -102,23 +98,42 @@ public class PlayBoard {
         }
     }
 
-    private class BoardListener implements ActionListener {
+    private class BoardButton extends JButton implements ActionListener {
+        int value = 0;
+        int row;
+        int column;
+
+        public BoardButton(int row, int column){
+            this.row = row;
+            this.column = column;
+            this.setBackground(Color.LIGHT_GRAY);
+            this.setPreferredSize(new Dimension(10, 10));
+            this.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+            this.addActionListener(this);
+        }
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-            JOptionPane.showMessageDialog(frame, "You clicked me!","Random Button",JOptionPane.PLAIN_MESSAGE);
+            value++;
+            if (value == 1) {
+//              Do the check which Ship lays where
+//                System.out.format("Button (%d,%d) is pushed.\n",row,column);
+                this.setBackground(Color.RED);
+            }else{
+                JOptionPane.showMessageDialog(frame, "You already clicked me!","Random Button",JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 
 
 
-    public static void main (String [] args){
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                new PlayBoard(8,8);
-            }
-        });
-    }
+//    public static void main (String [] args){
+//        SwingUtilities.invokeLater(new Runnable(){
+//            public void run(){
+//                new PlayBoard(8,8);
+//            }
+//        });
+//    }
 
 
 
