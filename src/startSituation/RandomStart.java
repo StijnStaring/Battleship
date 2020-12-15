@@ -10,14 +10,12 @@ public class RandomStart {
 
     int amountRows;
     int amountColumns;
-    Ship [] placedShips;
-
+    public ArrayList<Ship> shipsOnBoard= new ArrayList<>();
 
     public RandomStart(int amountRows, int amountColumns){
             this.amountRows = amountRows;
             this.amountColumns = amountColumns;
 
-        ArrayList<Ship> shipsOnBoard= new ArrayList<>();
         List<String> possibleShips = Arrays.asList("Carrier", "Battleship", "Submarine", "Destroyer");
         Collections.shuffle(possibleShips);
 

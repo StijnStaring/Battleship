@@ -1,6 +1,9 @@
 package GUI;
 
+import ScoreSystem.Score;
 import sessionEleven.ex1.BasicListener;
+import ships.Ship;
+import startSituation.RandomStart;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -8,11 +11,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class PlayBoard {
     int amountRows;
     int amountColumns;
-    private JFrame frame;
+    final JFrame frame;
+    public ArrayList<Ship> shipsOnBoard;
+    public int scorePlayerOne = 0;
+    private int scorePlayerTwo = 0;
 
     public PlayBoard(int amountRows, int amountColumns){
         this.amountRows = amountRows;
@@ -46,6 +53,17 @@ public class PlayBoard {
         highScore.addActionListener(new HighScoreListener());
         quitGame.addActionListener(new QuitGameListener());
 
+        //      Have to do the test for a random start
+        RandomStart randomStart = new RandomStart(this.amountRows,this.amountColumns);
+        this.shipsOnBoard =  randomStart.shipsOnBoard;
+
+        //      Initialize the player scores --> have to do the check
+//        Score playerOne = new Score();
+//        this.scorePlayerOne = playerOne.currentScore;
+//        Score playerTwo = new Score();
+//        this.scorePlayerTwo = playerTwo.currentScore;
+
+        
         for (int i = 0; i < amountRows; i++) {
             for (int j = 0; j < amountColumns; j++) {
                 BoardButton button = new BoardButton(i,j);
@@ -64,13 +82,6 @@ public class PlayBoard {
         panel1.add(s2Label);
         panel1.add(fill2);
 
-//        subPanel21.add(s1Label);
-//        subPanel22.add(turnOf);
-//        subPanel23.add(s2Label);
-//        panel2.add(subPanel21);
-//        panel2.add(subPanel22);
-//        panel2.add(subPanel23);
-
         frame.setLayout(new BorderLayout());
         frame.add(panel1,BorderLayout.PAGE_START);
 //        frame.add(panel2,BorderLayout.CENTER);
@@ -78,6 +89,8 @@ public class PlayBoard {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        
+
 
     }
 
@@ -109,32 +122,34 @@ public class PlayBoard {
             this.setBackground(Color.LIGHT_GRAY);
             this.setPreferredSize(new Dimension(10, 10));
             this.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-            this.addActionListener(this);
+            this.addActionListener(this); // add a listener to the individual button
+
         }
 
         @Override
         public void actionPerformed(ActionEvent ev) {
             value++;
             if (value == 1) {
-//              Do the check which Ship lays where
-//                System.out.format("Button (%d,%d) is pushed.\n",row,column);
-                this.setBackground(Color.RED);
+                int [] triedShot = {this.row,this.column};
+                for (Ship testShip : shipsOnBoard) {
+                    if (testShip.checkShot(triedShot)) {
+                        String nameShip = testShip.getName();
+                        switch (nameShip) {
+                            case "Carrier" -> {
+                                this.setBackground(Color.RED);
+                            }
+                            case "Battleship" -> this.setBackground(Color.GREEN);
+                            case "Submarine" -> this.setBackground(Color.YELLOW);
+                            case "Destroyer" -> this.setBackground(Color.WHITE);
+                            default -> this.setBackground(Color.BLUE);
+                        }
+                    }
+                }
             }else{
-                JOptionPane.showMessageDialog(frame, "You already clicked me!","Random Button",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "You already clicked me. \nDon't try to cheat!","Board Button",JOptionPane.WARNING_MESSAGE);
             }
         }
     }
-
-
-
-//    public static void main (String [] args){
-//        SwingUtilities.invokeLater(new Runnable(){
-//            public void run(){
-//                new PlayBoard(8,8);
-//            }
-//        });
-//    }
-
 
 
 }

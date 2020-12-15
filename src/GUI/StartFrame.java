@@ -176,6 +176,12 @@ public class StartFrame {
 
     public static void main(String[] args) {
 
+
+
+
+
+
+//      Creates a seperate thread for changing the GUI (eventloop)
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 new StartFrame();

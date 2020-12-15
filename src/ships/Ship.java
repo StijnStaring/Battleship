@@ -9,7 +9,7 @@ public abstract class Ship {
     public int [] startIndex;
     public int direction;
     public ArrayList<int []> takenIndices;
-//    int[] shot = {0,0};
+    public int damage;
 
     public Ship(String name,int [] startIndex, int direction){
         this.name = name;
@@ -35,10 +35,22 @@ public abstract class Ship {
     public boolean checkShot(int[] shot){
         for(int[] indices: this.allUsedIndices()){
             if(Arrays.equals(shot, indices)){
+                this.damage++;
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean isSunk(){
+        if(this.damage == this.getLength()){
+            return true;
+        }else if (this.damage < this.getLength()){
+            return false;
+        }else{
+            throw new IllegalArgumentException("Damage can't be bigger than the size of the ship!");
+        }
+
     }
 
     public ArrayList<int []> allUsedIndices() {
@@ -48,30 +60,32 @@ public abstract class Ship {
             int rowIndex = this.startIndex[0];
             int columnIndex = this.startIndex[1];
             for (int i = 1; i < this.getLength(); i++) {
-                columnIndex++;
+                rowIndex++;
                 allIndices.add(new int[]{rowIndex, columnIndex});
             }
         } else if (direction == 1) {
             int rowIndex = this.startIndex[0];
             int columnIndex = this.startIndex[1];
             for (int i = 1; i < this.getLength(); i++) {
-                rowIndex++;
+                columnIndex++;
                 allIndices.add(new int[]{rowIndex, columnIndex});
             }
         } else if (direction == 2) {
             int rowIndex = this.startIndex[0];
             int columnIndex = this.startIndex[1];
             for (int i = 1; i < this.getLength(); i++) {
-                columnIndex--;
+                rowIndex--;
                 allIndices.add(new int[]{rowIndex, columnIndex});
             }
         } else if (direction == 3) {
             int rowIndex = this.startIndex[0];
             int columnIndex = this.startIndex[1];
             for (int i = 1; i < this.getLength(); i++) {
-                rowIndex--;
+                columnIndex--;
                 allIndices.add(new int[]{rowIndex, columnIndex});
             }
+        }else{
+            throw new IllegalArgumentException("Illegal direction used!");
         }
         return allIndices;
     }

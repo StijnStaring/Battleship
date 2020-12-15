@@ -18,7 +18,16 @@ public class Carrier extends Ship{
 
 
 //    public static void main(String[] args) {
-//        Carrier euCarrier = new Carrier(new int[] {0,0},1);
-//        System.out.println(Arrays.toString(euCarrier.allUsedIndices()));
+//        Carrier euCarrier = new Carrier(new int[] {10,8},0);
+////        System.out.println(Arrays.toString());
+//        ArrayList<int []> allEUCarrier = euCarrier.allUsedIndices();
+//        for(int i = 0;i<euCarrier.length;i++){
+//            System.out.println(Arrays.toString(allEUCarrier.get(i)));
+//        }
+//        System.out.println(euCarrier.damage);
+//        int[] tryShot = {12,8};
+//        euCarrier.checkShot(tryShot);
+//        System.out.println(euCarrier.damage);
+//        System.out.println(euCarrier.isSunk());
 //    }
 }
