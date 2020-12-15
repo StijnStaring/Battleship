@@ -10,7 +10,7 @@ public class RandomStart {
 
     int amountRows;
     int amountColumns;
-    public ArrayList<Ship> shipsOnBoard= new ArrayList<>();
+    public ArrayList<Ship> shipsOnBoard = new ArrayList<>();
 
     public RandomStart(int amountRows, int amountColumns){
             this.amountRows = amountRows;
@@ -80,7 +80,9 @@ public class RandomStart {
 
     public boolean inBoard(Ship newShip){
         for(int[] indices: newShip.allUsedIndices()){
-            if(indices[0] >= amountRows || indices[0] >= amountColumns || indices[1] >= amountRows || indices[1] >= amountColumns){
+//            System.out.println(indices[0]);
+//            System.out.println(indices[1]);
+            if(indices[0] >= amountRows || indices[0] >= amountColumns || indices[1] >= amountRows || indices[1] >= amountColumns || indices[0] < 0 || indices[1] < 0){
                 return false;
             }
 

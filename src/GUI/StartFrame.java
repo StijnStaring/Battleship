@@ -1,5 +1,6 @@
 package GUI;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,12 +11,15 @@ public class StartFrame {
     public JSpinner rowSpinner;
     public JSpinner columnSpinner;
     final public static int initialRows = 8;
+    public boolean equalScore = true;
+    String path = "";
 
     public StartFrame(){
         frame = new JFrame();
         frame.setTitle("Battleship: limited edition - seclection screen");
 //        frame.setPreferredSize(new Dimension(800,400));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
 
 //      Defining panel 1
         JPanel panel1 = new JPanel();
@@ -118,7 +122,7 @@ public class StartFrame {
         @Override
         public void actionPerformed(ActionEvent ev) {
 //            frame.dispose();
-            new PlayBoard((Integer) rowSpinner.getValue(),(Integer) columnSpinner.getValue());
+            new PlayBoard((Integer) rowSpinner.getValue(),(Integer) columnSpinner.getValue(),path,equalScore);
         }
     }
 
@@ -133,7 +137,7 @@ public class StartFrame {
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-            JTextArea textArea = new JTextArea(6, 25);
+            JTextArea textArea = new JTextArea(20, 20);
             textArea.setText(rulesExplained);
             textArea.setEditable(false);
             JScrollPane scrollPane = new JScrollPane(textArea);
@@ -162,24 +166,30 @@ public class StartFrame {
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-            JOptionPane.showMessageDialog(frame, "Not yet implemented!", "Warning!", JOptionPane.WARNING_MESSAGE);
+
+            JFileChooser chooseFile = new JFileChooser();
+            FileNameExtensionFilter filterOptions = new FileNameExtensionFilter("Text files", "txt");
+            chooseFile.setFileFilter(filterOptions);
+            int returnVal = chooseFile.showOpenDialog(frame);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                path = chooseFile.getSelectedFile().getAbsolutePath();
+
+//                System.out.println("You chose to open this file: " + chooseFile.getSelectedFile().getAbsolutePath());
+            }
         }
     }
 
     private class chooseScoringSystemListener implements ActionListener {
 
-        @Override
+       @Override
         public void actionPerformed(ActionEvent ev) {
-            JOptionPane.showMessageDialog(frame, "Not yet implemented!", "Warning!", JOptionPane.WARNING_MESSAGE);
+            String[] possibilities = {"Equal Score System", "Adjusted Score System"};
+            String output = (String)JOptionPane.showInputDialog(frame,"Which scoring system would you like to use?","Kind of scoring system",JOptionPane.QUESTION_MESSAGE,null,possibilities,"Equal Score System");
+            equalScore = output.equals("Equal Score System");
         }
     }
 
     public static void main(String[] args) {
-
-
-
-
-
 
 //      Creates a seperate thread for changing the GUI (eventloop)
         SwingUtilities.invokeLater(new Runnable(){
