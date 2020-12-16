@@ -1,21 +1,16 @@
 package GUI;
 
-import ScoreSystem.Score;
-import sessionEleven.ex1.BasicListener;
+import highScore.HighScore;
+import scoreSystem.Score;
 import ships.Ship;
 import startSituation.DefinedStart;
 import startSituation.RandomStart;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import static java.lang.String.valueOf;
 
 public class PlayBoard {
     int amountRows;
@@ -29,11 +24,31 @@ public class PlayBoard {
     JLabel s1Label;
     JLabel s2Label;
     int AMOUNT_OF_SHIPS = 4;
+    HighScore highestScores;
 
 
-    public PlayBoard(int amountRows, int amountColumns,String path,boolean equalScore){
+    public PlayBoard(int amountRows, int amountColumns, String path, boolean equalScore, HighScore highestScores){
         this.amountRows = amountRows;
         this.amountColumns = amountColumns;
+        this.highestScores = highestScores;
+
+        if(path.equals("")){
+            RandomStart randomStart = new RandomStart(this.amountRows,this.amountColumns);
+            this.shipsOnBoard =  randomStart.shipsOnBoard;
+        }else{
+            DefinedStart ds = new DefinedStart(path);
+            this.amountRows = ds.amountRows;
+            this.amountColumns = ds.amountColumns;
+            if(ds.feasible){
+                this.shipsOnBoard = ds.shipsOnBoard;
+            }else{
+                RandomStart randomStart = new RandomStart(this.amountRows,this.amountColumns);
+                this.shipsOnBoard =  randomStart.shipsOnBoard;
+            }
+
+
+        }
+
         frame = new JFrame();
         frame.setSize(new Dimension(600,800));
         frame.setResizable(false);
@@ -45,7 +60,7 @@ public class PlayBoard {
         panel1.setPreferredSize(new Dimension(600,100));
         panel1.setBorder(BorderFactory.createEmptyBorder(10,10,0,10));
         JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayout(amountRows,amountColumns,5,5));
+        panel3.setLayout(new GridLayout(this.amountRows,this.amountColumns,5,5));
         panel3.setPreferredSize(new Dimension(600,600));
         panel3.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
@@ -64,28 +79,18 @@ public class PlayBoard {
         highScore.addActionListener(new HighScoreListener());
         quitGame.addActionListener(new QuitGameListener());
 
-        //      Have to do the test for a random start
-        if(path.equals("")){
-            RandomStart randomStart = new RandomStart(this.amountRows,this.amountColumns);
-            this.shipsOnBoard =  randomStart.shipsOnBoard;
-        }else{
-            DefinedStart ds = new DefinedStart(path);
-            this.shipsOnBoard = ds.shipsOnBoard;
-        }
+
 
         //      Initialize the player scores --> have to do the check if penalize player two or not
         if (equalScore){
             this.scorePlayerOne = new Score();
-            this.scorePlayerTwo = new Score();
         }else{
             this.scorePlayerOne = new Score(11,16,21,26);
-            this.scorePlayerTwo = new Score();
         }
+        this.scorePlayerTwo = new Score();
 
-
-        
-        for (int i = 0; i < amountRows; i++) {
-            for (int j = 0; j < amountColumns; j++) {
+        for (int i = 0; i < this.amountRows; i++) {
+            for (int j = 0; j < this.amountColumns; j++) {
                 BoardButton button = new BoardButton(i,j);
                 panel3.add(button);
             }
@@ -118,7 +123,8 @@ public class PlayBoard {
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-            JOptionPane.showMessageDialog(frame, "Not yet implemented!", "Warning!", JOptionPane.WARNING_MESSAGE);
+
+            JOptionPane.showMessageDialog(frame,highestScores.convertToString(),"High Score", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -126,7 +132,7 @@ public class PlayBoard {
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-
+            highestScores.saveHighscore();
             frame.dispose();
         }
     }
@@ -188,10 +194,14 @@ public class PlayBoard {
             }
             if (count == AMOUNT_OF_SHIPS){
                 if(scorePlayerOne.currentScore > scorePlayerTwo.currentScore){
+                    highestScores.updateHighScore(scorePlayerOne);
                     JOptionPane.showMessageDialog(frame,"The winner is: Player 1!","Game Over", JOptionPane.INFORMATION_MESSAGE);
+
                 }else if(scorePlayerOne.currentScore < scorePlayerTwo.currentScore){
+                    highestScores.updateHighScore(scorePlayerTwo);
                     JOptionPane.showMessageDialog(frame,"The winner is: Player 2!","Game Over", JOptionPane.INFORMATION_MESSAGE);
                 }else {
+                    highestScores.updateHighScore(scorePlayerOne);
                     JOptionPane.showMessageDialog(frame,"Tie - Play another time to decide the real winner!","Game Over", JOptionPane.INFORMATION_MESSAGE);
                 }
 

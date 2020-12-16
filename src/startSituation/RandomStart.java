@@ -62,26 +62,9 @@ public class RandomStart {
         return true;
     }
 
-    public List<Object> generateLegitimatePlace(Ship newShip, ArrayList<Ship> shipsOnBoard) {
-        if (inBoard(newShip) && noOverlap(newShip, shipsOnBoard)) {
-            return Arrays.asList(newShip.startIndex, newShip.direction);
-        } else {
-            while (true) {
-                int[] randomStartIndex = {new Random().nextInt(amountRows), new Random().nextInt(amountColumns)};
-                int randomDirection = new Random().nextInt(4);
-                newShip.setStartIndex(randomStartIndex);
-                newShip.setDirection(randomDirection);
-                if (inBoard(newShip) && noOverlap(newShip, shipsOnBoard)) {
-                    return Arrays.asList(newShip.startIndex, newShip.direction);
-                }
-            }
-        }
-    }
-
-    public boolean inBoard(Ship newShip){
+    public static boolean inBoard(Ship newShip,int amountRows, int amountColumns){
         for(int[] indices: newShip.allUsedIndices()){
-//            System.out.println(indices[0]);
-//            System.out.println(indices[1]);
+
             if(indices[0] >= amountRows || indices[0] >= amountColumns || indices[1] >= amountRows || indices[1] >= amountColumns || indices[0] < 0 || indices[1] < 0){
                 return false;
             }
@@ -90,5 +73,20 @@ public class RandomStart {
         return true;
     }
 
+    public List<Object> generateLegitimatePlace(Ship newShip, ArrayList<Ship> shipsOnBoard) {
+        if (inBoard(newShip,this.amountRows,this.amountColumns) && noOverlap(newShip, shipsOnBoard)) {
+            return Arrays.asList(newShip.startIndex, newShip.direction);
+        } else {
+            while (true) {
+                int[] randomStartIndex = {new Random().nextInt(amountRows), new Random().nextInt(amountColumns)};
+                int randomDirection = new Random().nextInt(4);
+                newShip.setStartIndex(randomStartIndex);
+                newShip.setDirection(randomDirection);
+                if (inBoard(newShip,this.amountRows,this.amountColumns) && noOverlap(newShip, shipsOnBoard)) {
+                    return Arrays.asList(newShip.startIndex, newShip.direction);
+                }
+            }
+        }
+    }
 }
 

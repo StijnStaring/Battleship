@@ -1,4 +1,4 @@
-package ScoreSystem;
+package scoreSystem;
 
 import ships.Ship;
 

@@ -1,4 +1,6 @@
 package GUI;
+import highScore.HighScore;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -12,6 +14,7 @@ public class StartFrame {
     public JSpinner columnSpinner;
     final public static int initialRows = 8;
     public boolean equalScore = true;
+    HighScore highestScores;
     String path = "";
 
     public StartFrame(){
@@ -114,6 +117,9 @@ public class StartFrame {
         frame.pack();
         frame.setVisible(true);
 
+//        Creating the High Score
+        highestScores = new HighScore();
+
 
     }
 
@@ -122,7 +128,8 @@ public class StartFrame {
         @Override
         public void actionPerformed(ActionEvent ev) {
 //            frame.dispose();
-            new PlayBoard((Integer) rowSpinner.getValue(),(Integer) columnSpinner.getValue(),path,equalScore);
+            new PlayBoard((Integer) rowSpinner.getValue(),(Integer) columnSpinner.getValue(),path,equalScore,highestScores);
+            path = "";
         }
     }
 
@@ -150,7 +157,9 @@ public class StartFrame {
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-            JOptionPane.showMessageDialog(frame, "Not yet implemented!", "Warning!", JOptionPane.WARNING_MESSAGE);
+
+            JOptionPane.showMessageDialog(frame,highestScores.convertToString(),"High Score", JOptionPane.INFORMATION_MESSAGE);
+
         }
     }
 
@@ -198,11 +207,5 @@ public class StartFrame {
             }
         });
 
-
     }
-
-
-
-
-
 }
