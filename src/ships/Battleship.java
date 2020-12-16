@@ -8,6 +8,7 @@ public class Battleship extends Ship {
         super("Battleship",startIndex,direction);
         this.length = 4;
     }
+
     //    Length will never change thus no need for a setter
     public int getLength(){
         return this.length;

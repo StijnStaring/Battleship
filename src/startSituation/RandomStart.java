@@ -20,8 +20,8 @@ public class RandomStart {
         Collections.shuffle(possibleShips);
 
         for(String ship: possibleShips){
-            int[] randomStartIndex = {new Random().nextInt(amountRows), new Random().nextInt(amountColumns)};
-            int randomDirection = new Random().nextInt(4);
+            int[] randomStartIndex = {new Random().nextInt(amountRows), new Random().nextInt(amountColumns)}; // Get a random start position
+            int randomDirection = new Random().nextInt(4); // Get a random direction of the ship
             switch (ship) {
                 case "Carrier" -> {
                     List<Object> checkedPlaceBoard = generateLegitimatePlace(new Carrier(randomStartIndex, randomDirection), shipsOnBoard);
@@ -73,6 +73,7 @@ public class RandomStart {
         return true;
     }
 
+//  A start position and direction that are legitimate, are sought for a ship on the current board
     public List<Object> generateLegitimatePlace(Ship newShip, ArrayList<Ship> shipsOnBoard) {
         if (inBoard(newShip,this.amountRows,this.amountColumns) && noOverlap(newShip, shipsOnBoard)) {
             return Arrays.asList(newShip.startIndex, newShip.direction);

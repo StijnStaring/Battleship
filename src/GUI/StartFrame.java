@@ -15,12 +15,11 @@ public class StartFrame {
     final public static int initialRows = 8;
     public boolean equalScore = true;
     HighScore highestScores;
-    String path = "";
+    String path = ""; // The path for reading the txt file to load the placement of the ships
 
     public StartFrame(){
         frame = new JFrame();
         frame.setTitle("Battleship: limited edition - seclection screen");
-//        frame.setPreferredSize(new Dimension(800,400));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
@@ -52,8 +51,8 @@ public class StartFrame {
         JPanel grayPanel6 = new JPanel();
 
 //      Setting up the spinners
-        SpinnerModel rowSpinnerModel = new SpinnerNumberModel(initialRows, initialRows + 0, initialRows + 5,  1);
-        SpinnerModel columnSpinnerModel = new SpinnerNumberModel(initialRows, initialRows + 0, initialRows + 5,  1);
+        SpinnerModel rowSpinnerModel = new SpinnerNumberModel(initialRows, initialRows, initialRows + 5,  1);
+        SpinnerModel columnSpinnerModel = new SpinnerNumberModel(initialRows, initialRows, initialRows + 5,  1);
         rowSpinner = new JSpinner(rowSpinnerModel);
         columnSpinner = new JSpinner(columnSpinnerModel);
         JSpinner.NumberEditor rowEditor = new JSpinner.NumberEditor(rowSpinner,"#" );
@@ -123,28 +122,25 @@ public class StartFrame {
 
     }
 
+//       Seperate classes are created to implement the listeners
+
+//       Start the game
     private class startGameListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-//            frame.dispose();
+
             new PlayBoard((Integer) rowSpinner.getValue(),(Integer) columnSpinner.getValue(),path,equalScore,highestScores);
             path = "";
         }
     }
-
+//       Explain the rules
     private class rulesListener implements ActionListener {
-        String rulesExplained = "Ik ben makelaar in koffi, en woon op de Lauriergracht No 37.\n Het is mijn gewoonte niet, " +
-                "romans te schrijven, of zulke dingen, en het heeft dan ook lang geduurd, voor \n ik er toe " +
-                "overging een paar riem papier extra te bestellen, en het werk aan te vangen, dat \n gij, " +
-                "lieve lezer, zoâven in de hand hebt genomen, en dat ge lezen moet als ge makelaar\n in " +
-                "koffie zijt, of als ge wat anders zijt. Niet alleen dat ik nooit iets schreef wat \n naar " +
-                "een roman geleek, maar ik houd er zelfs niet van, iets dergelijks te lezen, omdat " +
-                "ik een man van zaken ben.";
+        String rulesExplained = " Here should come the rules.";
 
         @Override
         public void actionPerformed(ActionEvent ev) {
-            JTextArea textArea = new JTextArea(20, 20);
+            JTextArea textArea = new JTextArea(10, 10);
             textArea.setText(rulesExplained);
             textArea.setEditable(false);
             JScrollPane scrollPane = new JScrollPane(textArea);
@@ -152,7 +148,7 @@ public class StartFrame {
 
         }
     }
-
+//       Give the High Score
     private class highScoreListener implements ActionListener {
 
         @Override
@@ -162,7 +158,7 @@ public class StartFrame {
 
         }
     }
-
+//       quit the program
     private class exitListener implements ActionListener {
 
         @Override
@@ -170,7 +166,7 @@ public class StartFrame {
             frame.dispose();
         }
     }
-
+//       Import the txt file that holds the placement of the different ships
     private class chooseShipListener implements ActionListener {
 
         @Override
@@ -183,11 +179,10 @@ public class StartFrame {
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                 path = chooseFile.getSelectedFile().getAbsolutePath();
 
-//                System.out.println("You chose to open this file: " + chooseFile.getSelectedFile().getAbsolutePath());
             }
         }
     }
-
+//       Make a choice of scoring system
     private class chooseScoringSystemListener implements ActionListener {
 
        @Override

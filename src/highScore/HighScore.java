@@ -11,10 +11,10 @@ import java.util.StringTokenizer;
 
 public class HighScore {
 
-    public ArrayList<int[]> highScoresCollection;
-    int people = 5;
+    public ArrayList<int[]> highScoresCollection; // An ArrayList of all the high scores
+    int people = 5; // The maximum of scores that are included in the high score
 
-    //    Read in the file when constructed.
+    //    Read the file from the hard drive.
     public HighScore(){
         highScoresCollection = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class HighScore {
                 highScoresCollection.add(placeScore);
                 line = br.readLine();
             }
-
+    //    The file that is read from the hard drive can not already include more scores than are allowed in the high score
             if(highScoresCollection.size() > people){
                 throw new ArrayStoreException();
             }
@@ -37,12 +37,11 @@ public class HighScore {
             e.printStackTrace();
         }catch (ArrayStoreException ae){
             JOptionPane.showMessageDialog(null, "The highScore initially stores already more scores then allowed." + ae);
-
         }
-
     }
 
-    //    Update the highScore --> in effect when a game is played. Assesses the score of the winner of the game.
+    //    Update the highScore when a game has finished.
+    //    Assess only the score of the winner of the game and decide if it is high enough to be included in the high score
     public void updateHighScore(Score player){
         int lengthOriginal = highScoresCollection.size();
         Integer [] tempScores = new Integer[lengthOriginal+1];
@@ -59,29 +58,26 @@ public class HighScore {
                 highScoresCollection.add(placeScore);
             }
         }else{
-//            tempScores.size();
             for (int i = 1; i <= people; i++) {
                 int[] placeScore = {i, tempScores[i - 1]};
                 highScoresCollection.add(placeScore);
             }
         }
     }
-
+    //    Convert the high scores stored in an ArrayList to a string to show in a popup panel
     public String convertToString(){
-        String s = "Place" + "            " + "Score" + "\n";
+        StringBuilder s = new StringBuilder("Place" + "            " + "Score" + "\n");
         for (int[] value: highScoresCollection){
-            s = new String(s + String.valueOf(value[0]) + "                     " + String.valueOf(value[1]) + "\n");
+            s.append(value[0]).append("                     ").append(value[1]).append("\n");
         }
-        return s;
-
-
+        return s.toString();
     }
 
-//    Write highScore the the hard drive.
+//    Safe the high score to the hard drive to be read again when the game is rebooted
     public void saveHighscore(){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter("src//highScore//highScore.txt",false))) {
             for (int [] value: highScoresCollection){
-                bw.write(String.valueOf(value[0]) + ";" + String.valueOf(value[1]) + "\n");
+                bw.write(value[0] + ";" + value[1] + "\n");
             }
         } catch(FileNotFoundException fnf) {
             System.out.println("File not found when writing: " + fnf);
@@ -89,28 +85,4 @@ public class HighScore {
             System.out.println("An I/O writing error occurred: " + io);
         }
     }
-
-//    public static void main(String[] args) {
-//        HighScore hs = new HighScore();
-//        for (int [] value: hs.highScoresCollection){
-//            System.out.println(Arrays.toString(value));
-//        }
-//
-////        JTextArea textArea = new JTextArea(10, 10);
-//        String highScoreString = hs.convertToString();
-////        textArea.setText(highScoreString);
-////        textArea.setEditable(false);
-//
-////        JOptionPane.showMessageDialog(null,highScoreString);
-//        JOptionPane.showMessageDialog(null,highScoreString,"High Score", JOptionPane.INFORMATION_MESSAGE);
-//        hs.saveHighscore();
-////
-////        JScrollPane scrollPane = new JScrollPane(textArea);
-////        JOptionPane.showMessageDialog(null,scrollPane);
-//
-//    }
-
-
-
-
 }

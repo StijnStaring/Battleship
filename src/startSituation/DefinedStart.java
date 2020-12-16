@@ -12,16 +12,16 @@ public class DefinedStart {
     public ArrayList<Ship> shipsOnBoard;
     public int amountRows;
     public int amountColumns;
-    public boolean feasible = true;
-    public boolean wrongLength = false;
+    public boolean feasible = true; // Is there a feasibel placement given
+    public boolean wrongLength = false; // Is the length that is given correct
 
     public DefinedStart(String path){
 
         shipsOnBoard = new ArrayList<>();
-
+        // A buffered reader provides buffering of data for fast reading
         try(BufferedReader br = new BufferedReader(new FileReader(path))) {
 
-            //read the board size
+            //Read the board size
             String line = br.readLine();
             StringTokenizer tokenizerOld = new StringTokenizer(line);
             int amountRows = Integer.parseInt(tokenizerOld.nextToken(";").trim());
@@ -29,9 +29,10 @@ public class DefinedStart {
             this.amountRows = amountRows;
             this.amountColumns = amountColumns;
 
-            //start reading in the ships
+            //Reading the placements of the ships
             line = br.readLine();
             while (line != null){
+                // Keeps track of all the ship coördinates that are read
                 ArrayList<int[]> allIndices = new ArrayList<>();
                 int [] startIndex= {0,0};
                 int direction;
@@ -75,11 +76,11 @@ public class DefinedStart {
             for (int i= 0; i<4;i++){
                 shipsOnBoardTest.add(shipsOnBoard.get(i));
             }
+            //  Check the feasibility of the defined ships
+            //  Flag overlap and when the ship is not laying in the board
             for(Ship testShip: shipsOnBoard) {
                 shipsOnBoardTest.remove(testShip);
-//                for (Ship ship2:shipsOnBoardTest){
-//                    System.out.println(ship2.getName());
-//                }
+
                 if (!RandomStart.noOverlap(testShip, shipsOnBoardTest)) {
                     JOptionPane.showMessageDialog(null, "You have provided ships that have overlap!\nRandom placement will apply.");
                     this.feasible = false;
@@ -89,7 +90,6 @@ public class DefinedStart {
                     JOptionPane.showMessageDialog(null, "You have provided ships that lay outside the board!\nRandom placement will apply.");
                     this.feasible = false;
                     break;
-//                    throw new IllegalArgumentException("The ships are not all inside the board.\nPleas provide a feasible setup of the ships.");
                 }
             }
 
@@ -99,15 +99,12 @@ public class DefinedStart {
         } catch(FileNotFoundException fnf) {
             JOptionPane.showMessageDialog(null, "File was not found!\nRandom placement will apply.");
             this.feasible = false;
-//            System.out.println("File not found when reading: " + fnf);
         } catch(IOException io) {
             JOptionPane.showMessageDialog(null, "Input/Output Exception!\nRandom placement will apply.");
             this.feasible = false;
-//            System.out.println("An I/O reading error occurred: " + io);
         } catch (IllegalArgumentException iae) {
             JOptionPane.showMessageDialog(null, "The coördinates provided are wrong!\nRandom placement will apply.");
             this.feasible = false;
-//            e.printStackTrace();
         } catch (NamingException ne) {
             JOptionPane.showMessageDialog(null, "The name of the ship is wrong!\nRandom placement will apply.");
             this.feasible = false;
@@ -116,6 +113,7 @@ public class DefinedStart {
         }
     }
 
+//  Get the direction from two coördinates of the ship
     public static int getDirection(int[] firstIndex, int[] secondIndex) throws IllegalArgumentException{
 
         if(firstIndex[0] < secondIndex[0] && firstIndex[1] == secondIndex[1]){

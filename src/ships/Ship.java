@@ -3,12 +3,13 @@ package ships;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+// An abstract class 'ship' is build to implement the functionality that all the specific ships have in common
 public abstract class Ship {
 
     public String name;
-    public int [] startIndex;
-    public int direction;
-    public ArrayList<int []> takenIndices;
+    public int [] startIndex; // The coördinates of the the start of the ship
+    public int direction; // Indictes if the ship points up, down, right or left
+    public ArrayList<int []> takenIndices; // In taken indices all the coördinates of the tiles that are taken by the ship are stored
     public int damage;
 
     public Ship(String name,int [] startIndex, int direction){
@@ -30,7 +31,7 @@ public abstract class Ship {
         this.direction = direction;
     }
 
-    abstract public int getLength();
+    abstract public int getLength(); // The length differs for every specific ship
 
     public boolean checkShot(int[] shot){
         for(int[] indices: this.allUsedIndices()){
@@ -53,6 +54,7 @@ public abstract class Ship {
 
     }
 
+    // Derive from the direction and the start coördinates all the coördinates that are occupied by a ship
     public ArrayList<int []> allUsedIndices() {
         ArrayList<int[]> allIndices = new ArrayList<>();
         allIndices.add(this.startIndex);
@@ -89,5 +91,4 @@ public abstract class Ship {
         }
         return allIndices;
     }
-
 }

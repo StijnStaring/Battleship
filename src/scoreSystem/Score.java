@@ -12,6 +12,7 @@ public class Score {
     public int scoreSubmarine;
     public int scoreDestroyer;
 
+//  The score used for the 'Equal score system'
     public Score(){
            this.currentScore = 0;
            this.scoreCarrier = 10;
@@ -19,6 +20,8 @@ public class Score {
            this.scoreSubmarine = 20;
            this.scoreDestroyer = 25;
     }
+
+//  Overload the constructor when the 'Adjusted score system' is used
     public Score(int scoreCarrier, int scoreBattleship, int scoreSubmarine, int scoreDestroyer){
         this.currentScore = 0;
         this.scoreCarrier = scoreCarrier;
@@ -27,6 +30,9 @@ public class Score {
         this.scoreDestroyer = scoreDestroyer;
     }
 
+//  Tried shot are the coördinates of the tile that was clicked and shipsOnBoard specifies the ships on the board and their placement.
+//  There is checked if the ship is being hit and the score is updated accordingly.
+//  A distinction is made if this shot made the ship sink or not.
     public String updateScore(int[] triedShot, ArrayList<Ship> shipsOnBoard) {
         for (Ship testShip : shipsOnBoard) {
             if (testShip.checkShot(triedShot)) {
@@ -64,15 +70,11 @@ public class Score {
                         }
                         return "Destroyer";
                     }
-                    default -> {
-                        throw new IllegalArgumentException("Unrecognizable ship on board");
-                    }
+                    default -> throw new IllegalArgumentException("Unrecognizable ship on board");
                 }
             }
 
         }
         return "";
     }
-
-
 }
